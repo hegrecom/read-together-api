@@ -1,0 +1,3 @@
+[default.databases.read_together_development]
+url = "mysql://root@localhost/read_together_development"
+
