@@ -5,7 +5,7 @@ use rocket::fairing::AdHoc;
 use rocket_sync_db_pools::{diesel, database};
 
 #[database("read_together")]
-struct Db(diesel::MysqlConnection);
+pub struct Db(diesel::MysqlConnection);
 
 async fn run_migrations(rocket: Rocket<Build>) -> Rocket<Build> {
     diesel_migrations::embed_migrations!("db/migrations");
