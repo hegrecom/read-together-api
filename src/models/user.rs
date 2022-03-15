@@ -1,9 +1,8 @@
 use chrono::NaiveDateTime;
-use rocket::serde::{Serialize, Deserialize};
+use rocket::serde::Serialize;
 
-#[derive(Debug, Clone, Serialize, Deserialize, Queryable, Insertable)]
+#[derive(Debug, Clone, Serialize, Queryable)]
 #[serde(crate = "rocket::serde")]
-#[table_name="users"]
 pub struct User {
     pub id: i32,
     pub email: String,
