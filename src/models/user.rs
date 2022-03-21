@@ -6,11 +6,12 @@ use rocket::serde::Serialize;
 pub struct User {
     pub id: i32,
     pub email: String,
-    pub password: String,
+    #[serde(skip_serializing)]
+    #[allow(dead_code)]
+    password: String,
     pub name: String,
     pub created_at: Option<NaiveDateTime>,
     pub updated_at: Option<NaiveDateTime>,
-    pub deleted_at: Option<NaiveDateTime>,
 }
 
 table! {
@@ -21,7 +22,6 @@ table! {
         name -> Varchar,
         created_at -> Nullable<Datetime>,
         updated_at -> Nullable<Datetime>,
-        deleted_at -> Nullable<Datetime>,
     }
 }
 
