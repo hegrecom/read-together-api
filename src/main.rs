@@ -6,6 +6,7 @@ mod config;
 mod controllers;
 mod models;
 mod dtos;
+mod services;
 
 use config::database;
 use controllers::users_controller;
