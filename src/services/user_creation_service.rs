@@ -4,6 +4,7 @@ use crate::models::{users, User};
 use diesel::query_dsl::{RunQueryDsl, QueryDsl};
 use diesel::expression_methods::ExpressionMethods;
 use std::fmt;
+use validator::Validate;
 
 pub struct UserCreationService {
     pub db: Db,
@@ -11,6 +12,7 @@ pub struct UserCreationService {
 
 #[derive(Debug)]
 pub enum ApiExceptions {
+    BadRequest(String),
     Conflict(String),
     InternalServerError(String)
 }
@@ -26,7 +28,9 @@ impl UserCreationService {
         UserCreationService { db }
     }
 
-    pub async fn run(&self, user_dto: UserDto) -> Result<User, ApiExceptions> {
+    pub async fn run(&self, mut user_dto:UserDto) -> Result<User, ApiExceptions> {
+        user_dto.validate().map_err(|e| ApiExceptions::BadRequest(e.to_string()))?;
+        user_dto.encrypt_password().map_err(|e| ApiExceptions::InternalServerError(e.to_string()))?;
         self.db.run(move |conn| {
             let existing_user: Option<User> = users::table.filter(users::email.eq(&user_dto.email)).first(conn).ok();
             match existing_user {
