@@ -12,6 +12,7 @@ diesel = { version = "1.4.8", features = ["chrono"] }
 diesel_migrations = "1.4.0"
 regex = "1.5.5"
 rocket = { version = "0.5.0-rc.1", features = ["json"] }
+serde_json = "1.0.79"
 validator = { version = "0.12", features = ["derive"] }
 
 [dependencies.rocket_sync_db_pools]

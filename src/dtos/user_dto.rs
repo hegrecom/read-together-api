@@ -4,7 +4,7 @@ use regex::Regex;
 use rocket::serde::Deserialize;
 use validator::{Validate, ValidationError};
 
-#[derive(Debug, Clone, Deserialize, Insertable, Validate)]
+#[derive(Debug, Deserialize, Insertable, Validate)]
 #[serde(crate = "rocket::serde")]
 #[table_name = "users"]
 pub struct UserDto {
