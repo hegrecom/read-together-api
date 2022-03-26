@@ -1,6 +1,6 @@
 use crate::config::database::Db;
 use crate::dtos::UserDto;
-use crate::helpers::ErrorResponse;
+use crate::helpers::{ErrorResponse, ErrorFormatter};
 use crate::models::{users, User};
 use diesel::query_dsl::{RunQueryDsl, QueryDsl};
 use diesel::expression_methods::ExpressionMethods;
@@ -17,7 +17,7 @@ impl UserCreationService {
     }
 
     pub async fn run(&self, mut user_dto:UserDto) -> Result<User, ErrorResponse> {
-        user_dto.validate().map_err(|e| ErrorResponse::new(Status::BadRequest, e.to_string()))?;
+        user_dto.validate().map_err(|e| ErrorResponse::new(Status::BadRequest, ErrorFormatter::format_error(e)))?;
         user_dto.encrypt_password().map_err(|e| ErrorResponse::new(Status::InternalServerError, e.to_string()))?;
         self.db.run(move |conn| {
             let existing_user: Option<User> = users::table.filter(users::email.eq(&user_dto.email)).first(conn).ok();

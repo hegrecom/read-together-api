@@ -8,9 +8,9 @@ use validator::{Validate, ValidationError};
 #[serde(crate = "rocket::serde")]
 #[table_name = "users"]
 pub struct UserDto {
-    #[validate(email)]
+    #[validate(email(code = "invalid_email_format", message = "Email format is invalid"))]
     pub email: String,
-    #[validate(custom="validate_password")]
+    #[validate(custom(function = "validate_password", message = "Password should include at least 1 lower case letter, 1 upper case letter, 1 digit and special character between 8 to 32"))]
     pub password: String,
     pub name: String,
 }
@@ -27,7 +27,7 @@ fn validate_password(password: &str) -> Result<(), ValidationError> {
         && special_chars.is_match(password) {
         Ok(())
     } else {
-        Err(ValidationError::new("Password should include at least 1 lower case letter, 1 upper case letter, 1 digit and special character between 8 to 32"))
+        Err(ValidationError::new("invalid_password"))
     }
 }
 
