@@ -17,11 +17,15 @@ pub struct ApiResponse<T, U> where T: Serialize, U: Serialize {
 impl<'r, T, U> Responder<'r, 'static> for ApiResponse<T, U> where T: Serialize, U: Serialize {
     fn respond_to(self, _: &'r Request<'_>) -> response::Result<'static> {
         let response_body = serde_json::to_string(&self).map_err(|_| Status::InternalServerError)?;
-        Response::build()
+        let response = Response::build()
             .status(self.status)
             .header(ContentType::JSON)
             .sized_body(response_body.len(), Cursor::new(response_body))
-            .ok()
+            .finalize();
+        match self.status.code {
+            100..=399 => Ok(response),
+            _ => Err(self.status),
+        }
     }
 }
 
@@ -31,29 +35,29 @@ impl<T, U> ApiResponse<T, U> where T: Serialize, U: Serialize {
     }
 }
 
-impl<T> ApiResponse<T, ErrorMessage> where T: Serialize {
-    pub fn from(error_message: ErrorMessage) -> Self {
+impl<T> ApiResponse<T, ErrorResponse> where T: Serialize {
+    pub fn from(error_message: ErrorResponse) -> Self {
         ApiResponse::new(error_message.status, None, Some(error_message))
     }
 }
 
 #[derive(Debug, Serialize)]
 #[serde(crate = "rocket::serde")]
-pub struct ErrorMessage {
+pub struct ErrorResponse {
     #[serde(skip_serializing)]
     pub status: Status,
     message: String,
 }
 
-impl ErrorMessage {
+impl ErrorResponse {
     pub fn new(status: Status, message: String) -> Self {
-        ErrorMessage { status, message }
+        ErrorResponse { status, message }
     }
 }
 
-impl<'r> Responder<'r, 'static> for ErrorMessage {
+impl<'r> Responder<'r, 'static> for ErrorResponse {
     fn respond_to(self, request: &'r Request<'_>) -> response::Result<'static> {
-        ApiResponse::<Option<String>, ErrorMessage>::from(self).respond_to(request)
+        ApiResponse::<Option<String>, ErrorResponse>::from(self).respond_to(request)
     }
 }
 
