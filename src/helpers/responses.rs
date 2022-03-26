@@ -17,15 +17,11 @@ pub struct ApiResponse<T, U> where T: Serialize, U: Serialize {
 impl<'r, T, U> Responder<'r, 'static> for ApiResponse<T, U> where T: Serialize, U: Serialize {
     fn respond_to(self, _: &'r Request<'_>) -> response::Result<'static> {
         let response_body = serde_json::to_string(&self).map_err(|_| Status::InternalServerError)?;
-        let response = Response::build()
+        Response::build()
             .status(self.status)
             .header(ContentType::JSON)
             .sized_body(response_body.len(), Cursor::new(response_body))
-            .finalize();
-        match self.status.code {
-            100..=399 => Ok(response),
-            _ => Err(self.status),
-        }
+            .ok()
     }
 }
 
@@ -57,7 +53,7 @@ impl ErrorResponse {
 
 impl<'r> Responder<'r, 'static> for ErrorResponse {
     fn respond_to(self, request: &'r Request<'_>) -> response::Result<'static> {
-        ApiResponse::<Option<String>, ErrorResponse>::from(self).respond_to(request)
+        ApiResponse::<Option<serde_json::Value>, ErrorResponse>::from(self).respond_to(request)
     }
 }
 
