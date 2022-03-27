@@ -57,3 +57,8 @@ impl<'r> Responder<'r, 'static> for ErrorResponse {
     }
 }
 
+#[catch(default)]
+pub fn default_catcher(status: Status, request: &Request) -> ErrorResponse {
+    ErrorResponse::new(status, format!("Couldn't handle the request to {}. Try again later", request.uri().path()))
+}
+

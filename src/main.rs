@@ -16,5 +16,6 @@ use controllers::users_controller;
 fn rocket() -> _ {
     rocket::build().attach(database::stage())
                    .mount("/users", routes![users_controller::sign_up])
+                   .register("/", catchers![helpers::default_catcher])
 }
 
