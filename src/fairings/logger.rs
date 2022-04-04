@@ -26,10 +26,11 @@ impl Fairing for LoggerFairing {
 
     async fn on_request(&self, request: &mut Request<'_>, data: &mut Data<'_>) {
         let logger = request.local_cache(|| Logger::new());
-        logger.log_request(request, data).await.expect("Failed to log request");
+        logger.log_request(request, data).await;
     }
 
     async fn on_response<'r>(&self, request: &'r Request<'_>, response: &mut Response<'r>) {
-
+        let logger = request.local_cache(|| Logger::new());
+        logger.log_response(response).await;
     }
 }
