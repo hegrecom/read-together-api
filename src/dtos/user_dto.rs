@@ -32,8 +32,8 @@ fn validate_password(password: &str) -> Result<(), ValidationError> {
 }
 
 impl UserDto {
-    pub fn encrypt_password(&mut self) -> Result<(), BcryptError> {
-        match bcrypt::hash_with_salt(self.password.to_owned(), 10, b"aaaaaaaaaaaaaaaa") {
+    pub fn encrypt_password(&mut self, salt: &[u8]) -> Result<(), BcryptError> {
+        match bcrypt::hash_with_salt(self.password.to_owned(), 10, salt) {
             Ok(result) => { 
                 self.password = result.to_string();
                 Ok(())

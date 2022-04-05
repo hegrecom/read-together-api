@@ -1005,6 +1005,7 @@ dependencies = [
  "chrono",
  "diesel",
  "diesel_migrations",
+ "figment",
  "regex",
  "rocket",
  "rocket_sync_db_pools",

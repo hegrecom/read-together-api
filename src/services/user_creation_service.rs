@@ -1,9 +1,11 @@
+use crate::config::AppConfig;
 use crate::config::database::Db;
 use crate::dtos::UserDto;
 use crate::helpers::{ErrorResponse, ErrorFormatter};
 use crate::models::{users, User};
 use diesel::query_dsl::{RunQueryDsl, QueryDsl};
 use diesel::expression_methods::ExpressionMethods;
+use rocket::State;
 use rocket::http::Status;
 use validator::Validate;
 
@@ -16,9 +18,9 @@ impl UserCreationService {
         UserCreationService { db }
     }
 
-    pub async fn run(&self, mut user_dto:UserDto) -> Result<User, ErrorResponse> {
+    pub async fn run(&self, mut user_dto:UserDto, app_config: &State<AppConfig>) -> Result<User, ErrorResponse> {
         user_dto.validate().map_err(|e| ErrorResponse::new(Status::BadRequest, ErrorFormatter::format_error(e)))?;
-        user_dto.encrypt_password().map_err(|e| ErrorResponse::new(Status::InternalServerError, e.to_string()))?;
+        user_dto.encrypt_password(app_config.get_password_salt()).map_err(|e| ErrorResponse::new(Status::InternalServerError, e.to_string()))?;
         self.db.run(move |conn| {
             let existing_user: Option<User> = users::table.filter(users::email.eq(&user_dto.email)).first(conn).ok();
             match existing_user {
