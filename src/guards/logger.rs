@@ -24,7 +24,7 @@ impl Logger {
         } else { String::new() };
         request_body = self.filter_sensitive_info(request_body);
         info!(request_id = %self.request_id, uri = %request.uri(), method = %request.method(),
-              user_agent = %user_agent, user_ip = %user_ip, %request_body);
+              user_agent = %user_agent, user_ip = %user_ip, %request_body, "API request started");
     }
 
     fn filter_sensitive_info(&self, string: String) -> String {
@@ -42,8 +42,7 @@ impl Logger {
 
     pub async fn log_response<'r>(&self, response: &mut Response<'r>) {
         let status = response.status();
-        let body = response.body_mut().to_string().await.unwrap_or("".to_string());
-        info!(request_id = %self.request_id, %status, %body);
+        info!(request_id = %self.request_id, %status, "API request responded");
     }
 
     pub fn log(&self, level: Level, content: &str) {
