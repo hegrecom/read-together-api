@@ -9,6 +9,7 @@ edition = "2021"
 bcrypt = "0.12.0"
 chrono = { version = "0.4.19", features = ["serde"] }
 diesel = { version = "1.4.8", features = ["chrono"] }
+diesel-derive-enum = { version = "1.1.2", features = ["mysql"] }
 diesel_migrations = "1.4.0"
 figment = { version = "0.10.6", features = ["toml"] }
 regex = "1.5.5"

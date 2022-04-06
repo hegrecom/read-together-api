@@ -18,11 +18,14 @@ table! {
 }
 
 table! {
+    use diesel::sql_types::*;
+    use crate::models::plan_content_user_activity::ActivityMapping;
+
     plan_content_user_activities (id) {
         id -> Integer,
         plan_content_id -> Integer,
         user_id -> Integer,
-        activity -> Enum,
+        activity -> ActivityMapping,
         created_at -> Nullable<Datetime>,
         updated_at -> Nullable<Datetime>,
     }

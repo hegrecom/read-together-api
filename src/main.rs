@@ -13,6 +13,7 @@ mod guards;
 mod helpers;
 mod models;
 mod services;
+mod schema;
 mod fairings;
 
 use config::{database, AppConfig};

@@ -1,4 +1,4 @@
-use crate::models::users;
+use crate::schema::users;
 use bcrypt::{self, BcryptError};
 use regex::Regex;
 use rocket::serde::Deserialize;

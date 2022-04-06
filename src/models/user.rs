@@ -14,14 +14,3 @@ pub struct User {
     pub updated_at: Option<NaiveDateTime>,
 }
 
-table! {
-    users (id) {
-        id -> Integer,
-        email -> Varchar,
-        password -> Varchar,
-        name -> Varchar,
-        created_at -> Nullable<Datetime>,
-        updated_at -> Nullable<Datetime>,
-    }
-}
-
