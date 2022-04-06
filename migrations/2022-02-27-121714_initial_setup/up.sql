@@ -6,12 +6,10 @@ CREATE TABLE `users`
     `name`          varchar(255) NOT NULL COMMENT "user's displayed name",
     `created_at`    datetime(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT "record created time", 
     `updated_at`    datetime(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT "record updated time", 
-    `deleted_at`    datetime(6) DEFAULT NULL COMMENT "record deleted time", 
     PRIMARY KEY (`id`),
     KEY `idx_email` (`email`),
     KEY `idx_created_at` (`created_at`),
-    KEY `idx_updated_at` (`updated_at`),
-    KEY `idx_deleted_at` (`deleted_at`)
+    KEY `idx_updated_at` (`updated_at`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -22,12 +20,10 @@ CREATE TABLE `user_tokens`
     `token`         varchar(255) NOT NULL COMMENT "user token for identification",
     `created_at`    datetime(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT "record created time", 
     `updated_at`    datetime(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT "record updated time", 
-    `deleted_at`    datetime(6) DEFAULT NULL COMMENT "record deleted time", 
     PRIMARY KEY (`id`),
     KEY `idx_token` (`token`),
     KEY `idx_created_at` (`created_at`),
-    KEY `idx_updated_at` (`updated_at`),
-    KEY `idx_deleted_at` (`deleted_at`)
+    KEY `idx_updated_at` (`updated_at`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -37,11 +33,9 @@ CREATE TABLE `groups`
     `name`          varchar(255) NOT NULL COMMENT "group's displayed name",
     `created_at`    datetime(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT "record created time", 
     `updated_at`    datetime(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT "record updated time", 
-    `deleted_at`    datetime(6) DEFAULT NULL COMMENT "record deleted time", 
     PRIMARY KEY (`id`),
     KEY `idx_created_at` (`created_at`),
-    KEY `idx_updated_at` (`updated_at`),
-    KEY `idx_deleted_at` (`deleted_at`)
+    KEY `idx_updated_at` (`updated_at`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -52,13 +46,11 @@ CREATE TABLE `group_members`
     `group_id`      int(8) NOT NULL COMMENT "associated group id",
     `created_at`    datetime(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT "record created time", 
     `updated_at`    datetime(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT "record updated time", 
-    `deleted_at`    datetime(6) DEFAULT NULL COMMENT "record deleted time", 
     PRIMARY KEY (`id`),
     KEY `idx_user_id` (`user_id`),
     KEY `idx_group_id` (`group_id`),
     KEY `idx_created_at` (`created_at`),
-    KEY `idx_updated_at` (`updated_at`),
-    KEY `idx_deleted_at` (`deleted_at`)
+    KEY `idx_updated_at` (`updated_at`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -69,12 +61,10 @@ CREATE TABLE `plans`
     `name`          varchar(255) NOT NULL COMMENT "plan's displayed name",
     `created_at`    datetime(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT "record created time", 
     `updated_at`    datetime(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT "record updated time", 
-    `deleted_at`    datetime(6) DEFAULT NULL COMMENT "record deleted time", 
     PRIMARY KEY (`id`),
     KEY `idx_group_id` (`group_id`),
     KEY `idx_created_at` (`created_at`),
-    KEY `idx_updated_at` (`updated_at`),
-    KEY `idx_deleted_at` (`deleted_at`)
+    KEY `idx_updated_at` (`updated_at`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -85,13 +75,11 @@ CREATE TABLE `plans_participants`
     `plan_id`       int(8) NOT NULL COMMENT "associated plan id",
     `created_at`    datetime(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT "record created time", 
     `updated_at`    datetime(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT "record updated time", 
-    `deleted_at`    datetime(6) DEFAULT NULL COMMENT "record deleted time", 
     PRIMARY KEY (`id`),
     KEY `idx_user_id` (`user_id`),
     KEY `idx_plan_id` (`plan_id`),
     KEY `idx_created_at` (`created_at`),
-    KEY `idx_updated_at` (`updated_at`),
-    KEY `idx_deleted_at` (`deleted_at`)
+    KEY `idx_updated_at` (`updated_at`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -103,13 +91,11 @@ CREATE TABLE `plan_contents`
     `content`       text   NOT NULL COMMENT "content",
     `created_at`    datetime(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT "record created time", 
     `updated_at`    datetime(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT "record updated time", 
-    `deleted_at`    datetime(6) DEFAULT NULL COMMENT "record deleted time", 
     PRIMARY KEY (`id`),
     KEY `idx_plan_id` (`plan_id`),
     KEY `idx_sequence` (`sequence`),
     KEY `idx_created_at` (`created_at`),
-    KEY `idx_updated_at` (`updated_at`),
-    KEY `idx_deleted_at` (`deleted_at`)
+    KEY `idx_updated_at` (`updated_at`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -121,14 +107,12 @@ CREATE TABLE `plan_content_user_activities`
     `activity`          enum("start", "read") NOT NULL COMMENT "user activity",
     `created_at`        datetime(6) DEFAULT CURRENT_TIMESTAMP(6) COMMENT "record created time", 
     `updated_at`        datetime(6) DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6) COMMENT "record updated time", 
-    `deleted_at`        datetime(6) DEFAULT NULL COMMENT "record deleted time", 
     PRIMARY KEY (`id`),
     KEY `idx_plan_content_id` (`plan_content_id`),
     KEY `idx_user_id` (`user_id`),
     KEY `idx_activity` (`activity`),
     KEY `idx_created_at` (`created_at`),
-    KEY `idx_updated_at` (`updated_at`),
-    KEY `idx_deleted_at` (`deleted_at`)
+    KEY `idx_updated_at` (`updated_at`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 

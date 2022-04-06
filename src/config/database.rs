@@ -8,7 +8,7 @@ use rocket_sync_db_pools::{diesel, database};
 pub struct Db(diesel::MysqlConnection);
 
 async fn run_migrations(rocket: Rocket<Build>) -> Rocket<Build> {
-    diesel_migrations::embed_migrations!("db/migrations");
+    diesel_migrations::embed_migrations!("migrations");
 
     let conn = Db::get_one(&rocket).await.expect("database connection failure");
     conn.run(|c| embedded_migrations::run(c)).await.expect("diesel migrations failure");
