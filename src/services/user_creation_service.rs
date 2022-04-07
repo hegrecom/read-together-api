@@ -1,6 +1,6 @@
 use crate::config::AppConfig;
 use crate::config::database::Db;
-use crate::dtos::UserDto;
+use crate::dtos::UserCreationDto;
 use crate::helpers::ErrorResponse;
 use crate::models::User;
 use rocket::State;
@@ -15,7 +15,7 @@ impl UserCreationService {
         UserCreationService { db }
     }
 
-    pub async fn run(&self, user_dto: UserDto, app_config: &State<AppConfig>) -> Result<User, ErrorResponse> {
+    pub async fn run(&self, user_dto: UserCreationDto, app_config: &State<AppConfig>) -> Result<User, ErrorResponse> {
         let existing_user: Option<User> = User::find_by_email(&self.db, user_dto.email.clone()).await;
         match existing_user {
             Some(_) => Err(ErrorResponse::new(Status::Conflict, "The email has already taken".to_string())),

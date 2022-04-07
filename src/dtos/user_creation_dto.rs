@@ -7,7 +7,7 @@ use validator::{Validate, ValidationError};
 #[derive(Debug, Deserialize, Insertable, Validate)]
 #[serde(crate = "rocket::serde")]
 #[table_name = "users"]
-pub struct UserDto {
+pub struct UserCreationDto {
     #[validate(email(code = "invalid_email_format", message = "Email format is invalid"))]
     pub email: String,
     #[validate(custom(function = "validate_password", message = "Password should include at least 1 lower case letter, 1 upper case letter, 1 digit and special character between 8 to 32"))]
@@ -31,7 +31,7 @@ fn validate_password(password: &str) -> Result<(), ValidationError> {
     }
 }
 
-impl UserDto {
+impl UserCreationDto {
     pub fn encrypt_password(&mut self, salt: &[u8]) -> Result<(), BcryptError> {
         match bcrypt::hash_with_salt(self.password.to_owned(), 10, salt) {
             Ok(result) => { 

@@ -1,3 +1,3 @@
-mod user_dto;
+mod user_creation_dto;
 
-pub use user_dto::UserDto;
+pub use user_creation_dto::UserCreationDto;

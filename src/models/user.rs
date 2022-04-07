@@ -8,7 +8,7 @@ use validator::Validate;
 
 use crate::config::AppConfig;
 use crate::config::database::Db;
-use crate::dtos::UserDto;
+use crate::dtos::UserCreationDto;
 use crate::helpers::{ErrorResponse, ErrorFormatter};
 use crate::schema::users;
 
@@ -32,7 +32,7 @@ impl User {
         ).await
     }
 
-    pub async fn create(db: &Db, mut user_dto: UserDto, app_config: &State<AppConfig>) -> Result<Self, ErrorResponse> {
+    pub async fn create(db: &Db, mut user_dto: UserCreationDto, app_config: &State<AppConfig>) -> Result<Self, ErrorResponse> {
         user_dto.validate().map_err(|e| ErrorResponse::new(Status::BadRequest, ErrorFormatter::format_error(e)))?;
         user_dto.encrypt_password(app_config.get_password_salt()).map_err(|e| ErrorResponse::new(Status::InternalServerError, e.to_string()))?;
         db.run(move |conn|
