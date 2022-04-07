@@ -6,12 +6,12 @@ use crate::models::User;
 use rocket::State;
 use rocket::http::Status;
 
-pub struct UserCreationService {
-    pub db: Db,
+pub struct UserCreationService<'a> {
+    pub db: &'a Db,
 }
 
-impl UserCreationService {
-    pub fn new(db: Db) -> Self {
+impl<'a> UserCreationService<'a> {
+    pub fn new(db: &'a Db) -> Self {
         UserCreationService { db }
     }
 
@@ -23,3 +23,4 @@ impl UserCreationService {
         }
     }
 }
+

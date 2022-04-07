@@ -12,7 +12,7 @@ use serde_json;
 #[post("/sign_up", data = "<user>")]
 pub async fn sign_up(db: Db, app_config: &State<AppConfig>, user: Json<UserCreationDto>) -> Result<ApiResponse<User, Option<serde_json::Value>>, ErrorResponse>
 {
-    let service = UserCreationService::new(db);
+    let service = UserCreationService::new(&db);
     let user = service.run(user.into_inner(), app_config).await?;
 
     Ok(ApiResponse::new(Status::Created, Some(user), None))
