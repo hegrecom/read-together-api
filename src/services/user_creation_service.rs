@@ -7,7 +7,7 @@ use rocket::State;
 use rocket::http::Status;
 
 pub struct UserCreationService<'a> {
-    pub db: &'a Db,
+    db: &'a Db,
 }
 
 impl<'a> UserCreationService<'a> {
