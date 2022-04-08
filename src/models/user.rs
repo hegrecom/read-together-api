@@ -10,6 +10,7 @@ use crate::config::AppConfig;
 use crate::config::database::Db;
 use crate::dtos::{UserCreationDto, UserSignInDto};
 use crate::helpers::{ErrorResponse, ErrorFormatter};
+use crate::models::UserToken;
 use crate::schema::users;
 
 #[derive(Debug, Clone, Serialize, Queryable)]
@@ -29,6 +30,18 @@ impl User {
         db.run(move |conn|
             users::table.filter(users::email.eq(&email)).first(conn).ok()
         ).await
+    }
+
+    pub async fn find_by_token_str(db: &Db, token_str: &str) -> Option<Self> {
+        match UserToken::find_by_token(&db, token_str.to_string()).await {
+            Some(token) => {
+                match token.user(&db).await {
+                    Some(user) => Some(user),
+                    None => None,
+                }
+            },
+            None => None,
+        }
     }
 
     pub async fn create(db: &Db, mut user_dto: UserCreationDto, app_config: &State<AppConfig>) -> Result<Self, ErrorResponse> {

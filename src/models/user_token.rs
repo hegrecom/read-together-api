@@ -7,7 +7,8 @@ use rocket::serde::Serialize;
 use crate::config::database::Db;
 use crate::dtos::UserTokenDto;
 use crate::helpers::ErrorResponse;
-use crate::schema::user_tokens;
+use crate::models::User;
+use crate::schema::{user_tokens, users};
 
 #[derive(Debug, Serialize, Insertable, Queryable)]
 #[serde(crate = "rocket::serde")]
@@ -30,6 +31,12 @@ impl UserToken {
         ).await
     }
 
+    pub async fn find_by_token(db: &Db, token: String) -> Option<Self> {
+        db.run(move |conn|
+            user_tokens::table.filter(user_tokens::token.eq(&token)).first(conn).ok()
+        ).await
+    }
+
     pub async fn create(db: &Db, user_id: i32) -> Result<Self, ErrorResponse> {
         let user_token_dto = UserTokenDto::new(user_id);
         db.run(move |conn|
@@ -48,6 +55,14 @@ impl UserToken {
             Some(token) => Ok(token),
             None => Ok(Self::create(db, user_id).await?),
         }
+    }
+
+    pub async fn user(&self, db: &Db) -> Option<User> {
+        let user_id = self.user_id;
+
+        db.run(move |conn|
+            users::table.filter(users::id.eq(&user_id)).first(conn).ok()
+        ).await
     }
 }
 

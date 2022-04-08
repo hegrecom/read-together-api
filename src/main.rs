@@ -31,6 +31,6 @@ fn rocket() -> _ {
         .attach(database::stage())
         .attach(LoggerFairing)
         .mount("/users", routes![users_controller::sign_up, users_controller::sign_in])
-        .register("/", catchers![helpers::default_catcher])
+        .register("/", catchers![helpers::unauthorized_catcher, helpers::not_found_catcher, helpers::default_catcher])
 }
 

@@ -62,3 +62,13 @@ pub fn default_catcher(status: Status, request: &Request) -> ErrorResponse {
     ErrorResponse::new(status, format!("Couldn't handle the request to {}. Try again later", request.uri().path()))
 }
 
+#[catch(401)]
+pub fn unauthorized_catcher(_: &Request) -> ErrorResponse {
+    ErrorResponse::new(Status::Unauthorized, "Signing in is required".to_string())
+}
+
+#[catch(404)]
+pub fn not_found_catcher(request: &Request) -> ErrorResponse {
+    ErrorResponse::new(Status::NotFound, format!("{}: Not found. Check your url again", request.uri()))
+}
+
