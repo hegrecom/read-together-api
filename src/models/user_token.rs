@@ -64,5 +64,14 @@ impl UserToken {
             users::table.filter(users::id.eq(&user_id)).first(conn).ok()
         ).await
     }
+
+    pub async fn destroy(&self, db: &Db) -> Result<usize, ErrorResponse> {
+        let id = self.id;
+        let size = db.run(move |conn|
+            diesel::delete(user_tokens::table.filter(user_tokens::id.eq(&id))).execute(conn)
+        ).await.map_err(|e| ErrorResponse::new(Status::InternalServerError, e.to_string()))?;
+
+        Ok(size)
+    }
 }
 
