@@ -30,7 +30,7 @@ fn rocket() -> _ {
         .attach(AdHoc::config::<AppConfig>())
         .attach(database::stage())
         .attach(LoggerFairing)
-        .mount("/users", routes![users_controller::sign_up, users_controller::sign_in])
+        .mount("/users", routes![users_controller::sign_up, users_controller::sign_in, users_controller::sign_out])
         .register("/", catchers![helpers::unauthorized_catcher, helpers::not_found_catcher, helpers::default_catcher])
 }
 

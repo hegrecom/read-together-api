@@ -10,6 +10,12 @@ use crate::models::User;
 
 pub struct CurrentUser(User);
 
+impl CurrentUser {
+    pub fn into_inner(self) -> User {
+        self.0
+    }
+}
+
 impl Deref for CurrentUser {
     type Target = User;
 
