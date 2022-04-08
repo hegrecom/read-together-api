@@ -42,5 +42,12 @@ impl UserToken {
                }
         ).await
     }
+
+    pub async fn find_or_create(db: &Db, user_id: i32) -> Result<Self, ErrorResponse> {
+        match Self::find_by_user_id(db, user_id).await {
+            Some(token) => Ok(token),
+            None => Ok(Self::create(db, user_id).await?),
+        }
+    }
 }
 

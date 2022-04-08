@@ -8,7 +8,7 @@ use validator::Validate;
 
 use crate::config::AppConfig;
 use crate::config::database::Db;
-use crate::dtos::UserCreationDto;
+use crate::dtos::{UserCreationDto, UserSignInDto};
 use crate::helpers::{ErrorResponse, ErrorFormatter};
 use crate::schema::users;
 
@@ -18,7 +18,6 @@ pub struct User {
     pub id: i32,
     pub email: String,
     #[serde(skip_serializing)]
-    #[allow(dead_code)]
     password: String,
     pub name: String,
     pub created_at: Option<NaiveDateTime>,
@@ -44,6 +43,12 @@ impl User {
                 Err(e) => Err(ErrorResponse::new(Status::InternalServerError, e.to_string())),
             }
         ).await
+    }
+
+    pub fn verify_password(&self, db: &Db, user_dto: &UserSignInDto) -> Result<bool, ErrorResponse> {
+        let matched = bcrypt::verify(&user_dto.password, &self.password).map_err(|e| ErrorResponse::new(Status::InternalServerError, e.to_string()))?;
+
+        Ok(matched)
     }
 }
 
