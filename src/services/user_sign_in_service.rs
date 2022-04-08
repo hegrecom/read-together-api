@@ -18,7 +18,7 @@ impl<'a> UserSignInService<'a> {
         let user = User::find_by_email(self.db, user_dto.email.clone()).await;
         match user {
             Some(user) => {
-                if user.verify_password(self.db, &user_dto)? {
+                if user.verify_password(&user_dto)? {
                     let token = UserToken::find_or_create(self.db, user.id).await?; 
                     Ok((user, token))
                 } else {

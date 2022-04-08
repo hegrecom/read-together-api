@@ -45,7 +45,7 @@ impl User {
         ).await
     }
 
-    pub fn verify_password(&self, db: &Db, user_dto: &UserSignInDto) -> Result<bool, ErrorResponse> {
+    pub fn verify_password(&self, user_dto: &UserSignInDto) -> Result<bool, ErrorResponse> {
         let matched = bcrypt::verify(&user_dto.password, &self.password).map_err(|e| ErrorResponse::new(Status::InternalServerError, e.to_string()))?;
 
         Ok(matched)
