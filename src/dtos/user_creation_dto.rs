@@ -1,8 +1,9 @@
-use crate::schema::users;
 use bcrypt::{self, BcryptError};
 use regex::Regex;
 use rocket::serde::Deserialize;
 use validator::{Validate, ValidationError};
+
+use crate::schema::users;
 
 #[derive(Debug, Deserialize, Insertable, Validate)]
 #[serde(crate = "rocket::serde")]
