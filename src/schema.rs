@@ -3,6 +3,7 @@ table! {
         id -> Integer,
         user_id -> Integer,
         group_id -> Integer,
+        admin -> Bool,
         created_at -> Nullable<Datetime>,
         updated_at -> Nullable<Datetime>,
     }
