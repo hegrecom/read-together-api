@@ -1,5 +1,8 @@
+use rocket::http::Status;
 use validator::{ValidationErrors, ValidationErrorsKind};
 use std::borrow::Cow;
+
+use crate::helpers::ErrorResponse;
 
 pub struct ErrorFormatter;
 
@@ -24,4 +27,9 @@ impl ErrorFormatter {
 
         message
     }
+
+    pub fn internal_server_error(error: impl ToString) -> ErrorResponse {
+        ErrorResponse::new(Status::InternalServerError, error.to_string())
+    }
 }
+
