@@ -18,7 +18,7 @@ mod schema;
 mod fairings;
 
 use config::{database, AppConfig};
-use controllers::users_controller;
+use controllers::{groups_controller, users_controller};
 use fairings::LoggerFairing;
 
 #[launch]
@@ -31,6 +31,7 @@ fn rocket() -> _ {
         .attach(database::stage())
         .attach(LoggerFairing)
         .mount("/users", routes![users_controller::sign_up, users_controller::sign_in, users_controller::sign_out])
+        .mount("/groups", routes![groups_controller::create])
         .register("/", catchers![helpers::unauthorized_catcher, helpers::not_found_catcher, helpers::default_catcher])
 }
 
