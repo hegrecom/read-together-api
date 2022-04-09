@@ -32,6 +32,7 @@ fn rocket() -> _ {
         .attach(LoggerFairing)
         .mount("/users", routes![users_controller::sign_up, users_controller::sign_in, users_controller::sign_out])
         .mount("/groups", routes![groups_controller::create])
-        .register("/", catchers![helpers::unauthorized_catcher, helpers::not_found_catcher, helpers::default_catcher])
+        .register("/", catchers![helpers::unauthorized_catcher, helpers::bad_request_catcher,
+                                helpers::not_found_catcher, helpers::default_catcher])
 }
 

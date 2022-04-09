@@ -62,6 +62,11 @@ pub fn default_catcher(status: Status, request: &Request) -> ErrorResponse {
     ErrorResponse::new(status, format!("Couldn't handle the request to {}. Try again later", request.uri().path()))
 }
 
+#[catch(400)]
+pub fn bad_request_catcher(_: &Request) -> ErrorResponse {
+    ErrorResponse::new(Status::BadRequest, "Required fields missing".to_string())
+}
+
 #[catch(401)]
 pub fn unauthorized_catcher(_: &Request) -> ErrorResponse {
     ErrorResponse::new(Status::Unauthorized, "Signing in is required".to_string())
