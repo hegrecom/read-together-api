@@ -36,5 +36,11 @@ impl Group {
             ).map_err(|e| ErrorFormatter::internal_server_error(e))
         }).await
     } 
+
+    pub async fn find_by_name(db: &Db, group_name: String) -> Option<Self> {
+        db.run(move |conn| 
+            groups::table.filter(groups::name.eq(&group_name)).first::<Self>(conn).ok()
+        ).await
+    }
 }
 
